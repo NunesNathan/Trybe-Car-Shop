@@ -1,17 +1,33 @@
-// import CustomRouter from './routes/Router';
-// import App from './app';
+import express from 'express';
+import connectToDatabase from './database/connection';
+import ErrorMiddleware from './middleware/error/errorUseMiddleware';
+import carRouter from './router/carRouter';
 
-// import exampleController from './controllers/controller-example';
+class App {
+  public app: express.Application;
 
-// import { example } from './interfaces/ExampleInterface';
+  constructor() {
+    this.app = express();
+    this.config();
+  }
 
-// const server = new App();
+  public startServer(PORT: string | number = 3001): void {
+    connectToDatabase();
+    this.app.listen(
+      PORT,
+      () => console.log(`Server running here 👉 http://localhost:${PORT}`),
+    );
+  }
 
-// const exampleController = new exampleController();
+  private config() {
+    this.app.use(express.json());
+    this.app.use('/cars', carRouter);
+    this.app.use(ErrorMiddleware.errorTreatment);
+  }
 
-// const exampleRouter = new CustomRouter<Car>();
-// exampleRouter.addRoute(exampleController);
+  public getApp() {
+    return this.app;
+  }
+}
 
-// server.addRouter(exampleRouter.router);
-
-// export default server;
+export default new App();

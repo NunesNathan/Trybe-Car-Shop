@@ -1,3 +1,5 @@
-// import server from './server-example';
+import App from './server';
 
-// server.startServer();
+const PORT = 3001;
+
+App.startServer(PORT);
