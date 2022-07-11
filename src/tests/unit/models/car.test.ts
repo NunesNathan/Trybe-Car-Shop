@@ -15,11 +15,11 @@ describe('Car Model', () => {
     });
 
     it('Success case', async () => {
-      const movieModel = new CarModel();
+      const carModel = new CarModel();
 
-      const movieCreated = await movieModel.create(mock.validCar);
+      const carCreated = await carModel.create(mock.validCar);
 
-      expect(movieCreated).to.be.deep.equal(mock.responseValidCar);
+      expect(carCreated).to.be.deep.equal(mock.responseValidCar);
     });
   });
 });

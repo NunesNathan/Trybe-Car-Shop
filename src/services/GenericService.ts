@@ -20,7 +20,7 @@ export default class GenericService<T> implements Service<T> {
     }
     return {
       status: 201,
-      data: this.model.create(entity),
+      data: await this.model.create(entity),
     };
   }
 
