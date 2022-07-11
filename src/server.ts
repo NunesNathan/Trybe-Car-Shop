@@ -1,5 +1,5 @@
 import express from 'express';
-import connectToDatabase from './database/connection';
+import connectToDatabase from './connection';
 import ErrorMiddleware from './middleware/error/errorUseMiddleware';
 import carRouter from './router/carRouter';
 
