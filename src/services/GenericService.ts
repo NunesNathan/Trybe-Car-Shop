@@ -32,7 +32,7 @@ export default class GenericService<T> implements Service<T> {
   }
 
   async readOne(id: string): Promise<DataResponse<T>> {
-    if (id.length !== 24) {
+    if (id.length < 24) {
       return {
         status: 400,
         data: 'Id must have 24 hexadecimal characters',
@@ -51,8 +51,26 @@ export default class GenericService<T> implements Service<T> {
     };
   }
 
-  update(id: string, entity: T): Promise<T | null> {
-    return this.model.update(id, entity);
+  async update(id: string, entity: T): Promise<DataResponse<T>> {
+    if (id.length < 24) {
+      return {
+        status: 400,
+        data: 'Id must have 24 hexadecimal characters',
+      };
+    }
+
+    if (Object.keys(entity).length === 0) {
+      return { status: 400, data: 'You need to pass a entity' };
+    }
+
+    const exists = await this.model.update(id, entity);
+    if (!exists) {
+      return {
+        status: 404,
+        data: 'Object not found',
+      };
+    }
+    return { status: 200, data: exists };
   }
 
   delete(id: string): Promise<T | null> {
