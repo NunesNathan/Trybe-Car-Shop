@@ -31,8 +31,24 @@ export default class GenericService<T> implements Service<T> {
     };
   }
 
-  readOne(id: string): Promise<T | null> {
-    return this.model.readOne(id);
+  async readOne(id: string): Promise<DataResponse<T>> {
+    if (id.length !== 24) {
+      return {
+        status: 400,
+        data: 'Id must have 24 hexadecimal characters',
+      };
+    }
+    const exists = await this.model.readOne(id);
+    if (!exists) {
+      return {
+        status: 404,
+        data: 'Object not found',
+      };
+    }
+    return {
+      status: 200,
+      data: exists,
+    };
   }
 
   update(id: string, entity: T): Promise<T | null> {
