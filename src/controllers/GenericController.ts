@@ -64,9 +64,11 @@ export default class GenericController<T> {
     const { body } = req;
 
     try {
-      const requested = await this.service.update(id, body);
+      const { status, data } = await this.service.update(id, body);
       
-      return res.status(200).json(requested);
+      if (status !== 200) return res.status(status).json({ error: data });
+
+      return res.status(status).json(data);
     } catch (err) {
       next(err);
     }
