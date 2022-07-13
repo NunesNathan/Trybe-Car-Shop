@@ -36,4 +36,23 @@ describe('Car Service', () => {
       }
     });
   });
+
+  describe('Read Cars', () => {
+    const carModel = new CarModel();
+    before(() => {
+      sinon.stub(carModel, 'read').resolves([mock.responseValidCar]);
+    });
+
+    after(() => {
+      (carModel.read as SinonStub).restore();
+    });
+
+    it('Success case', async () => {
+      const carService = new CarService(carModel);
+
+      const carsReaded = await carService.read();
+
+      expect(carsReaded).to.be.deep.equal({ status: 200, data: [mock.responseValidCar] });
+    });
+  });
 });
