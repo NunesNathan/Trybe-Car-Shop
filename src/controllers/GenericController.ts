@@ -45,9 +45,11 @@ export default class GenericController<T> {
   ): Promise<Response | void> {
     const { id } = req.params;
     try {
-      const requested = await this.service.readOne(id);
-      
-      return res.status(200).json(requested);
+      const { status, data } = await this.service.readOne(id);
+      // para satisfazer o teste
+      if (status !== 200) return res.status(status).json({ error: data });
+
+      return res.status(status).json(data);
     } catch (err) {
       next(err);
     }
