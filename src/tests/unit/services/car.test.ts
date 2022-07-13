@@ -55,4 +55,25 @@ describe('Car Service', () => {
       expect(carsReaded).to.be.deep.equal({ status: 200, data: [mock.responseValidCar] });
     });
   });
+
+  describe('Update Car', () => {
+    const carModel = new CarModel();
+    before(() => {
+      sinon.stub(carModel, 'update').resolves(mock.responseValidCar);
+    });
+
+    after(() => {
+      (carModel.update as SinonStub).restore();
+    });
+
+    it('Success case', async () => {
+      const carService = new CarService(carModel);
+      const anotherValid = mock.responseValidCar;
+      anotherValid.buyValue = 19191
+
+      const carsReaded = await carService.update(mock.responseValidCar._id, anotherValid);
+
+      expect(carsReaded).to.be.deep.equal({ status: 200, data: mock.responseValidCar });
+    });
+  });
 });
