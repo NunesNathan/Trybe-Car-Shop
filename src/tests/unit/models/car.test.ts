@@ -22,7 +22,7 @@ describe('Car Model', () => {
       expect(carCreated).to.be.deep.equal(mock.responseValidCar);
     });
   });
-  
+
   describe('Read Cars', () => {
     before(() => {
       sinon.stub(Model, 'find').resolves([mock.responseValidCar]);
@@ -38,6 +38,24 @@ describe('Car Model', () => {
       const carCreated = await carModel.read();
 
       expect(carCreated).to.be.deep.equal([mock.responseValidCar]);
+    });
+  });
+
+  describe('Read Car', () => {
+    before(() => {
+      sinon.stub(Model, 'findOne').resolves(mock.responseValidCar);
+    });
+
+    after(() => {
+      (Model.findOne as SinonStub).restore();
+    });
+
+    it('Success case', async () => {
+      const carModel = new CarModel();
+
+      const carCreated = await carModel.readOne(mock.responseValidCar._id);
+
+      expect(carCreated).to.be.deep.equal(mock.responseValidCar);
     });
   });
 });
