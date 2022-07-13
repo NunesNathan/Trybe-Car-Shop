@@ -24,8 +24,11 @@ export default class GenericService<T> implements Service<T> {
     };
   }
 
-  read(): Promise<T[]> {
-    return this.model.read();
+  async read(): Promise<DataResponse<T[]>> {
+    return {
+      status: 200,
+      data: await this.model.read(),
+    };
   }
 
   readOne(id: string): Promise<T | null> {
