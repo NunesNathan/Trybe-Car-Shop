@@ -40,6 +40,8 @@ export const carSchema = new Schema<CarDocument>({
     min: 2,
     max: 7,
   },
+}, {
+  versionKey: false,
 });
 
 export default class CarModel extends GenericModel<Car> {
