@@ -10,11 +10,11 @@ import { Request, Response, NextFunction } from 'express';
 import { afterEach } from 'mocha';
 
 describe('Car Controller', () => {
+  const req = {} as Request;
+  const res = {} as Response;
+  let next: NextFunction = () => {};
+  const carService = new CarService(new CarModel());
   describe('Create Car', () => {
-    const req = {} as Request;
-    const res = {} as Response;
-    let next: NextFunction = () => {};
-    const carService = new CarService(new CarModel());
     before(() => {
       res.status = sinon.stub().returns(res)
       res.json = sinon.stub().returns(res)
@@ -46,6 +46,28 @@ describe('Car Controller', () => {
         expect(error).instanceOf(IErrorHttp);
         expect((next as sinon.SinonStub).calledWith(400, 'year is requireed')).to.be.true;
       }
+    });
+  });
+
+  describe('Read Car', () => {
+    before(() => {
+      res.status = sinon.stub().returns(res)
+      res.json = sinon.stub().returns(res)
+    });
+
+    afterEach(() => {
+      (carService.read as SinonStub).restore();
+    });
+
+    it('Success case', async () => {
+      sinon.stub(carService, 'read').resolves({ data: [mock.responseValidCar], status: 200 });
+
+      const carController = new CarController(carService);
+
+      await carController.read(req, res, next);
+
+      expect((res.status as sinon.SinonStub).calledWith(200)).to.be.true;
+      expect((res.json as sinon.SinonStub).calledWith([mock.responseValidCar])).to.be.true;
     });
   });
 });
