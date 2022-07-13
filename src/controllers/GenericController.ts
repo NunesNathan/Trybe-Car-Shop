@@ -30,11 +30,11 @@ export default class GenericController<T> {
     next: NextFunction,
   ): Promise<Response | void> {
     try {
-      const requested = await this.service.read();
+      const { status, data } = await this.service.read() || [];
       
-      return res.status(200).json(requested);
+      return res.status(status).json(data);
     } catch (err) {
-      next({ message: err });
+      next(err);
     }
   }
 
@@ -49,7 +49,7 @@ export default class GenericController<T> {
       
       return res.status(200).json(requested);
     } catch (err) {
-      next({ message: err });
+      next(err);
     }
   }
   
@@ -66,7 +66,7 @@ export default class GenericController<T> {
       
       return res.status(200).json(requested);
     } catch (err) {
-      next({ message: err });
+      next(err);
     }
   }
 
@@ -82,7 +82,7 @@ export default class GenericController<T> {
       
       return res.status(200).json(requested);
     } catch (err) {
-      next({ message: err });
+      next(err);
     }
   }
 }
